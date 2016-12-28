@@ -1,0 +1,41 @@
+%{
+enum yytokentype {
+		NUMBER = 258, STR = 259, ID = 260, INT = 261, VOID = 262, WHILE = 263, RETURN = 264, PRINT = 265, SCAN = 266, IF = 267, ELSE = 268,CMP = 269,ASSIGN = 270,STRING=271
+};
+char yylval[10];
+%}
+
+%%
+"int" { return INT;}
+"void" {return VOID;}
+"str" {return STR;}
+"while" {return WHILE;}
+"return" {return RETURN;}
+"print" {return PRINT;}
+"scan" {return SCAN;}
+"if" {return IF;}
+"else" {return ELSE;}
+"assign" {return ASSIGN;}
+\< { return CMP;}
+\> {return CMP;}
+"==" {return CMP;}
+\/\/.* {}
+"+"|"-"|"*"|"/"|"{"|"}"|","|";"|"="|"("|")"|"["|"]" { return yytext[0]; }
+\".*\" {strcpy(yylval,yytext); return STRING;}
+[0-9]+ {strcpy(yylval,yytext); return NUMBER;}
+\n	{}
+[a-zA-Z_][a-zA-Z0-9]* {strcpy(yylval,yytext);return ID;}
+[ \t] {}
+
+
+%%
+
+int yyerror(char *s)
+{
+	fprintf(stderr, "error: %s\n", s);
+	return 0;
+}
+int yywrap()
+{
+	return 1;
+}
